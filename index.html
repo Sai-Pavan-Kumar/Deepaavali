@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Deepaavali Live: burn Narakasura, light crackers with your hands | The SurfBoard</title>
+  <meta name="description" content="A virtual Deepavali in your browser. Shoot a fire arrow at Narakasura, light 12 crackers in your colony with your hands, and fire the sky with gestures.">
+  <meta name="theme-color" content="#09090F">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪔</text></svg>">
+  <link rel="preload" href="fonts/OverusedGrotesk-Black.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/modes.css">
+</head>
+<body data-mode="home">
+  <main class="stage" id="stage">
+    <p class="brand">by <b>The SurfBoard</b></p>
+    <p class="tracker-status" id="tracker-status" data-state="hidden" role="status"></p>
+    <video id="cam" playsinline muted autoplay aria-hidden="true"></video>
+
+    <section id="home" class="screen active" aria-labelledby="home-title">
+      <canvas class="home-sky" aria-hidden="true"></canvas>
+      <div class="home-horizon" aria-hidden="true"><div class="home-diyas"></div></div>
+      <div class="home-content">
+        <p class="eyebrow"><span class="eyebrow-dot"></span>Naraka Chaturdashi · Deepavali 2026</p>
+        <h1 id="home-title">Deepaavali <span class="shimmer">Live</span></h1>
+        <p class="home-sub">Burn Narakasura with a fire arrow. Light crackers on your street with an agarbatti. Fire the sky with a wave of your hand.</p>
+        <nav class="mode-cards" aria-label="Choose a mode">
+          <button class="mode-card card-vadha" data-go="mode-vadha">
+            <span class="card-art" data-art="vadha"></span><span class="card-streak" aria-hidden="true"></span>
+            <span class="card-body"><span class="mode-num">01 · Archery</span><b>Naraka Vadha</b><small>Draw the fire arrow and burn the effigy.</small><span class="card-cta">Play →</span></span>
+          </button>
+          <button class="mode-card card-gully" data-go="mode-gully">
+            <span class="card-art" data-art="gully"></span><span class="card-sparks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+            <span class="card-body"><span class="mode-num">02 · Your street</span><b>Gully Patakha</b><small>12 crackers, an agarbatti and your two hands.</small><span class="card-cta">Play →</span></span>
+          </button>
+          <button class="mode-card card-mudra" data-go="mode-mudra">
+            <span class="card-art card-hand" aria-hidden="true">🙏</span>
+            <span class="card-body"><span class="mode-num">03 · Gestures</span><b>Mudra Magic</b><small>Mudras, Maha Visphot, and one festive wish.</small><span class="card-cta">Play →</span></span>
+          </button>
+        </nav>
+        <p class="home-note"><span class="sound-hint">Tap anywhere for sound · </span>Camera stays on your device. Nothing is recorded or uploaded.</p>
+      </div>
+    </section>
+
+    <section id="mode-vadha" class="screen mode" aria-label="Naraka Vadha">
+      <div class="vadha-bg" aria-hidden="true"></div>
+      <div class="effigy"></div>
+      <canvas></canvas>
+      <div class="reticle" aria-hidden="true"></div>
+      <div class="vadha-input" aria-label="Drag back and release to shoot"></div>
+      <div class="hud">
+        <button class="back" data-go="home" aria-label="Back to modes">←</button>
+        <div class="hud-pill"><span class="hud-label">Arrows</span><b data-arrows>5</b></div>
+        <div class="hud-pill"><span class="hud-label">Wind</span><b data-wind>·</b></div>
+        <div class="power" aria-hidden="true"><div class="power-fill"></div></div>
+      </div>
+      <p class="hint"><span class="only-touch">Aim with mouse · Hold to draw · Release to shoot</span><span class="only-cam">Left hand aims · make a right fist near it · pull apart · open to shoot</span></p>
+      <div class="result" hidden><h2></h2><p></p><div class="result-actions"><button class="cta" data-replay>Play again</button><button class="cta ghost" data-go="home">Back to modes</button></div></div>
+    </section>
+
+    <section id="mode-gully" class="screen mode" aria-label="Gully Patakha">
+      <div class="colony"></div>
+      <div class="candle" aria-label="Candle for sparklers"></div>
+      <div class="road-items"></div>
+      <canvas></canvas>
+      <div class="gully-input"></div>
+      <div class="hud">
+        <button class="back" data-go="home" aria-label="Back to modes">←</button>
+        <button class="hud-pill hand-switch" data-hand-switch>Mouse moves: Right hand · Q to switch</button>
+      </div>
+      <button class="pataka-box" aria-expanded="false" aria-controls="shop">
+        <span class="box-lid"></span><span class="box-label">PATAKA BOX</span>
+      </button>
+      <div class="gully-onboarding" id="gully-onboarding" aria-live="polite">
+        <div class="onboarding-card">
+          <div class="onboarding-icon">🙌</div>
+          <h3 class="onboarding-title">Camera Mundhu Mee Chethulu Painaki Pettandi</h3>
+          <p class="onboarding-sub">Raise your hands up in front of the camera to play</p>
+          <div class="onboarding-steps">
+            <div class="step-chip">👈 <b>Left hand:</b> Rest on Pataka Box to open</div>
+            <div class="step-chip">👉 <b>Right hand:</b> Hold Agarbatti & touch cracker fuse</div>
+          </div>
+          <p class="onboarding-fallback">Touch / Mouse: Drag Agarbatti to light · Tap Pataka Box</p>
+          <button class="cta onboarding-btn" id="gully-got-it">Got it · Modalupettu →</button>
+        </div>
+      </div>
+      <p class="hint gully-hint">
+        <span class="only-touch">Tap Pataka Box to pick crackers · Move mouse to aim Agarbatti · Press Q to switch hands</span>
+        <span class="only-cam">🙌 Raise hands up · Left hand taps box · Right hand aims agarbatti at fuse</span>
+      </p>
+      <div class="shop" id="shop" role="dialog" aria-label="Pick a cracker"></div>
+      <p class="toast" role="status"></p>
+    </section>
+
+    <section id="mode-mudra" class="screen mode" aria-label="Mudra Magic">
+      <div class="mudra-props"></div>
+      <canvas></canvas>
+      <div class="hud"><button class="back" data-go="home" aria-label="Back to modes">←</button></div>
+      <div class="draw-hud" hidden>
+        <span class="draw-hud-text">✨ <b>Draw Mode:</b> Pinch fingers (👌) in air or drag on screen to draw sparklers!</span>
+        <button class="draw-clear-btn" type="button" title="Clear drawn sparklers">Clear</button>
+      </div>
+      <div class="legend" aria-label="Gestures"></div>
+      <div class="wish" aria-live="polite"></div>
+    </section>
+  </main>
+  <script type="module" src="js/main.js?v=16"></script>
+</body>
+</html>

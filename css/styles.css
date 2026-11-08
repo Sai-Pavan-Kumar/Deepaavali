@@ -1,0 +1,118 @@
+@font-face { font-family: 'Overused Grotesk'; src: url('../fonts/OverusedGrotesk-Book.ttf') format('truetype'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Overused Grotesk'; src: url('../fonts/OverusedGrotesk-Medium.ttf') format('truetype'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'Overused Grotesk'; src: url('../fonts/OverusedGrotesk-Bold.ttf') format('truetype'); font-weight: 700; font-display: swap; }
+@font-face { font-family: 'Overused Grotesk'; src: url('../fonts/OverusedGrotesk-Black.ttf') format('truetype'); font-weight: 900; font-display: swap; }
+
+:root {
+  /* SurfBoard base surfaces + a festival child palette (diya gold, marigold, kumkum). */
+  --surface-base: #09090F;
+  --surface-card: #111118;
+  --surface-elevated: #18181F;
+  --surface-overlay: rgba(9, 9, 15, 0.72);
+  --text-primary: #EEEEF5;
+  --text-secondary: #A8A8C4;
+  --border-default: rgba(255, 255, 255, 0.08);
+  --festive-gold: #FFD36B;
+  --festive-marigold: #FF9A3C;
+  --festive-kumkum: #E2463A;
+  --festive-pink: #FF7AD9;
+  --festive-teal: #4FD1C5;
+  --glow-gold: 0 0 24px rgba(255, 211, 107, 0.45);
+  --radius-m: 16px;
+  --radius-l: 24px;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-6: 24px; --space-8: 32px;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+* { box-sizing: border-box; margin: 0; }
+html, body { height: 100%; background: #000; color: var(--text-primary); font-family: 'Overused Grotesk', system-ui, sans-serif; overflow: hidden; -webkit-tap-highlight-color: transparent; }
+button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--festive-gold); outline-offset: 3px; }
+
+/* Laptop: locked 16:9 stage, letterboxed. Phones in portrait: full screen. */
+.stage { position: relative; width: min(100vw, calc(100dvh * 16 / 9)); aspect-ratio: 16 / 9; margin: 0 auto; top: 50%; translate: 0 -50%; overflow: clip; background: var(--surface-base); container-type: size; }
+@media (max-aspect-ratio: 1/1) { .stage { width: 100vw; height: 100dvh; aspect-ratio: auto; } }
+
+.brand { position: absolute; z-index: 40; top: max(var(--space-4), env(safe-area-inset-top)); left: 50%; translate: -50% 0; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--text-secondary); pointer-events: none; }
+.brand b { color: var(--text-primary); font-weight: 700; }
+.tracker-status { position: absolute; z-index: 40; top: max(var(--space-4), env(safe-area-inset-top)); right: var(--space-4); padding: var(--space-2) var(--space-3); border-radius: 999px; font-size: 12px; background: var(--surface-overlay); border: 1px solid var(--border-default); backdrop-filter: blur(12px); display: flex; align-items: center; gap: var(--space-2); }
+.tracker-status::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--festive-gold); animation: pulse 1.2s infinite; }
+.tracker-status[data-state="live"]::before { background: #22C55E; animation: none; }
+.tracker-status[data-state="failed"]::before, .tracker-status[data-state="denied"]::before { background: var(--festive-kumkum); animation: none; }
+.tracker-status[data-state="hidden"] { display: none; }
+
+.screen { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity .5s var(--ease-out), visibility .5s; }
+.screen.active { opacity: 1; visibility: visible; }
+.mode > canvas, .home-sky { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
+
+/* ---------- Home ---------- */
+#home { background: radial-gradient(90% 60% at 50% 100%, #3d1a0c 0%, #160d1c 45%, #05050b 100%); }
+.home-sky { z-index: 0; }
+.home-horizon { position: absolute; left: 0; right: 0; bottom: 0; height: 9%; background: linear-gradient(#120c14, #070509); border-top: 1px solid rgba(255,211,107,.18); }
+.home-diyas { position: absolute; inset: -14px 0 auto; height: 28px; background: radial-gradient(circle at 50% 35%, #fff4c0 0 3px, #ffb347 4px, rgba(255,140,40,.35) 9px, transparent 14px) 0 0 / 64px 28px repeat-x; animation: flicker-bg 1.4s ease-in-out infinite alternate; }
+.home-content { position: relative; z-index: 2; height: 100%; display: grid; place-content: center; justify-items: center; gap: clamp(10px, 2cqh, 24px); padding: var(--space-6); text-align: center; }
+.eyebrow { display: inline-flex; align-items: center; gap: var(--space-2); padding: 6px 14px; border-radius: 999px; border: 1px solid rgba(255,211,107,.25); background: rgba(255,211,107,.06); font-size: 13px; color: var(--festive-gold); letter-spacing: .04em; }
+.eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--festive-marigold); box-shadow: 0 0 10px var(--festive-marigold); }
+#home h1 { font-size: clamp(44px, 9cqh, 120px); font-weight: 900; letter-spacing: -.045em; line-height: .9; }
+.shimmer { background: linear-gradient(100deg, var(--festive-marigold) 20%, #fff4dc 45%, var(--festive-gold) 55%, var(--festive-marigold) 80%) 0 0 / 250% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shimmer 4s linear infinite; filter: drop-shadow(0 0 28px rgba(255,154,60,.45)); }
+.home-sub { color: var(--text-secondary); font-size: clamp(15px, 2.1cqh, 19px); max-width: 52ch; line-height: 1.45; }
+.mode-cards { display: flex; gap: var(--space-4); justify-content: center; margin-top: var(--space-2); }
+.mode-card { --accent: var(--festive-marigold); position: relative; width: clamp(190px, 23cqw, 290px); height: clamp(200px, 35cqh, 320px); border-radius: var(--radius-l); overflow: hidden; text-align: left; background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 16%, var(--surface-elevated)) 0%, var(--surface-card) 70%); border: 1px solid var(--border-default); transition: transform .45s var(--ease-spring), border-color .3s, box-shadow .4s; }
+.card-gully { --accent: var(--festive-pink); }
+.card-mudra { --accent: var(--festive-teal); }
+.mode-card:hover, .mode-card:focus-visible { transform: translateY(-8px) rotate(-.5deg); border-color: color-mix(in srgb, var(--accent) 60%, transparent); box-shadow: 0 24px 60px -18px color-mix(in srgb, var(--accent) 70%, transparent); }
+.card-art { position: absolute; left: 50%; top: 6%; height: 58%; translate: -50% 0; display: grid; place-items: center; transition: transform .5s var(--ease-spring), filter .4s; filter: drop-shadow(0 10px 20px rgba(0,0,0,.5)); }
+.card-art svg { height: 100%; width: auto; }
+.mode-card:hover .card-art { transform: translateY(-6px) scale(1.05); filter: drop-shadow(0 0 24px color-mix(in srgb, var(--accent) 70%, transparent)); }
+.card-hand { font-size: clamp(64px, 12cqh, 110px); animation: float 3s ease-in-out infinite; }
+.card-streak { position: absolute; right: -10%; top: 20%; width: 60%; height: 3px; rotate: -18deg; background: linear-gradient(90deg, transparent, #ffb347, #fff4c0); border-radius: 3px; box-shadow: 0 0 14px #ff9a3c; opacity: 0; }
+.card-vadha:hover .card-streak { animation: streak .7s var(--ease-out) forwards; }
+.card-sparks { position: absolute; left: 50%; top: 9%; }
+.card-sparks i { position: absolute; width: 3px; height: 10px; border-radius: 2px; background: #fff0b0; box-shadow: 0 0 6px #ffb347; opacity: 0; }
+.card-gully:hover .card-sparks i { animation: spark 0.9s ease-out infinite; }
+.card-sparks i:nth-child(odd) { --dx: -26px; } .card-sparks i:nth-child(even) { --dx: 26px; }
+.card-sparks i:nth-child(3n) { --dx: 8px; animation-delay: .3s !important; } .card-sparks i:nth-child(4n) { animation-delay: .6s !important; }
+.card-body { position: absolute; left: 0; right: 0; bottom: 0; padding: var(--space-4) var(--space-4) var(--space-4); display: grid; gap: 4px; background: linear-gradient(transparent, rgba(9,9,15,.9) 30%); }
+.card-body b { font-size: clamp(19px, 3cqh, 24px); font-weight: 700; letter-spacing: -.01em; }
+.card-body small { color: var(--text-secondary); font-size: 14px; line-height: 1.35; }
+.mode-num { color: var(--accent); font-weight: 700; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
+.card-cta { margin-top: 4px; font-size: 13px; font-weight: 700; color: var(--accent); transition: translate .3s var(--ease-out); }
+.mode-card:hover .card-cta { translate: 6px 0; }
+.home-note { font-size: 12px; color: var(--text-secondary); opacity: .75; }
+.sound-on .sound-hint { display: none; }
+@media (max-aspect-ratio: 1/1) {
+  .mode-cards { flex-direction: column; width: 100%; }
+  .mode-card { width: 100%; height: 96px; }
+  .card-art { left: auto; right: 4%; top: 8%; height: 84%; translate: 0; }
+  .card-body { background: none; padding-right: 35%; }
+  .card-cta, .card-body small { display: none; }
+  .card-hand { font-size: 48px; }
+}
+
+/* ---------- Shared HUD ---------- */
+.hud { position: absolute; z-index: 30; top: max(var(--space-4), env(safe-area-inset-top)); left: var(--space-4); right: var(--space-4); display: flex; align-items: center; gap: var(--space-2); pointer-events: none; }
+.hud > * { pointer-events: auto; }
+.back, .hud-pill { min-height: 44px; min-width: 44px; padding: 0 var(--space-4); border-radius: 999px; background: var(--surface-overlay); border: 1px solid var(--border-default); backdrop-filter: blur(12px); display: inline-flex; align-items: center; gap: var(--space-2); font-size: 14px; }
+.back { padding: 0; justify-content: center; font-size: 20px; transition: background .2s; }
+.back:hover { background: var(--surface-elevated); }
+.hud-label { color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+.cta { min-height: 48px; padding: 0 var(--space-8); border-radius: 999px; background: linear-gradient(180deg, var(--festive-gold), var(--festive-marigold)); color: #2a1404; font-weight: 700; box-shadow: var(--glow-gold); transition: transform .3s var(--ease-spring); }
+.cta:hover { transform: translateY(-2px); }
+.cta.ghost { background: var(--surface-overlay); color: var(--text-primary); border: 1px solid var(--border-default); box-shadow: none; }
+
+/* Camera: small mirror in Vadha, full backdrop in Mudra, hidden in Gully (only hands show). */
+#cam { position: absolute; z-index: 25; transform: scaleX(-1); object-fit: cover; opacity: 0; pointer-events: none; border-radius: var(--radius-m); width: 1px; height: 1px; }
+.has-camera[data-mode="vadha"] #cam { opacity: 1; width: 16%; height: auto; aspect-ratio: 16/9; left: var(--space-4); bottom: var(--space-4); border: 1px solid var(--border-default); }
+.has-camera[data-mode="mudra"] #cam { opacity: 1; inset: 0; width: 100%; height: 100%; z-index: 1; border-radius: 0; filter: saturate(.8) brightness(.55) contrast(1.05); }
+
+@keyframes pulse { 50% { opacity: .3; } }
+@keyframes shimmer { to { background-position: -250% 0; } }
+@keyframes flicker-bg { to { opacity: .75; filter: brightness(1.2); } }
+@keyframes float { 50% { transform: translateY(-8px); } }
+@keyframes streak { from { opacity: 1; transform: translateX(60%); } to { opacity: 0; transform: translateX(-120%); } }
+@keyframes spark { 0% { opacity: 1; transform: translate(0, 0) rotate(0); } 100% { opacity: 0; transform: translate(var(--dx), -40px) rotate(40deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
