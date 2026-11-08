@@ -9,6 +9,7 @@ const SAMPLE_FILES = {
   volley: 'sounds/rocket sound.wav',
   sparkle: 'sounds/sparkle.wav',
   ambient: 'sounds/homepage sound.mp3',
+  outro: 'sounds/Outro Sound.WAV',
 };
 
 let ac = null;
@@ -152,4 +153,5 @@ export const sfx = {
   chime() {
     [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach((f, i) => tone(f, f * 0.995, 2.8, { gain: 0.16, delay: i * 0.18 }));
   },
+  outro: (gain = 1.4) => play('outro', { gain }),
 };

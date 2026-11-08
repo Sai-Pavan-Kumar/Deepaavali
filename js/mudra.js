@@ -362,6 +362,7 @@ export function initMudra(root) {
     wish.classList.remove('show');
     void wish.offsetWidth;
     wish.classList.add('show');
+    sfx.outro();
     sfx.chime();
     setTimeout(() => sfx.volley(), 800);
     burst(fx, center.x, center.y, { count: 160, speed: 5.2, colors: [PALETTE.gold, PALETTE.white, PALETTE.saffron] });
